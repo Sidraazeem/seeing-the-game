@@ -1,0 +1,10 @@
+numpy
+opencv-python
+scikit-learn
+scikit-image
+matplotlib
+pillow
+torch
+SoccerNet
+huggingface_hub
+ipywidgets
