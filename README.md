@@ -69,24 +69,36 @@ When the reader is confident (τ = 0.8), 67% of its answers are correct, and 93%
 
 Strong shadows outside the grass hue range, overlapping and very small players, pale numbers on white kits, and blur that fuses two digits into one blob. Deblurring and other clean-up steps did not recover these: the detail is missing from the image.
 
+## Improvements after the progress presentation
+
+The "next steps" from our presentation are now in the notebooks. Each is a switch with a before/after comparison, chosen on validation data:
+
+| Improvement | Where | Idea |
+| --- | --- | --- |
+| Shadow-robust grass mask | 01, Part 8A | K-means (K = 2) learns this frame's sunlit and shaded grass colors; a pixel is grass if it is close to either in LAB, with lightness weighted 0.5 |
+| Split touching players | 01, Part 8B | Wide, solid blobs are cut at the valleys of their column sums (projection profile) |
+| Fairer detection score | 01, Part 8C | One-to-one matching, so one box over two players no longer counts as finding both |
+| LAB team colors | 01, Part 8D | Shirt colors clustered in LAB (optionally with lightness weighted down) |
+| Split touching digits | 02, B5 | Erosion finds one seed per digit, watershed grows them back to full stroke thickness |
+| More real training digits | 02, B6 | Harvest from 24 instead of 6 frames per labelled player, augmentation, test on held-out players |
+| Both halves together | 00, Part III | The detector's boxes are read by the jersey reader on the same GSR frames |
+
+Results of these sections will be added after the next full run in Colab.
+
 ## Repository layout
 
 ```
 notebooks/
-  01_field_and_teams.ipynb        field, players and teams (Muzammil)
-  02_jersey_numbers.ipynb         jersey-number pipeline, experiments A1–A4, B1–B4 (Sidra)
+  00_full_pipeline.ipynb          both halves in one notebook: Part I (01), Part II (02), Part III (both together)
+  01_field_and_teams.ipynb        field, players and teams, improvements in Part 8 (Muzammil)
+  02_jersey_numbers.ipynb         jersey-number pipeline, experiments A1–A4, B1–B6 (Sidra)
   03_jersey_end_to_end_cnn.ipynb  end-to-end CNN trained from scratch (Sidra; outputs not saved)
 figures/                          key figures exported from the notebooks
-presentation/                     progress presentation slides
 ```
 
 ## Running
 
-The notebooks were written for Google Colab (a GPU helps only for the CNN). Open one in Colab, run the setup cells to download the data, then run top to bottom. Local use: `pip install -r requirements.txt`.
-
-## Next steps
-
-Run both halves together on the same frames, make the grass mask robust to shadows, split touching players and digits, and collect more real training digits.
+The notebooks were written for Google Colab (a GPU helps only for the CNN). Open `00_full_pipeline.ipynb` in Colab and Run all; the jersey part mounts Google Drive and keeps its data and saved results in `MyDrive/csc481_soccer` (set `DOWNLOAD_DATA = True` the first time). Notebooks 01 and 02 still run on their own. Local use: `pip install -r requirements.txt`.
 
 ## License
 
